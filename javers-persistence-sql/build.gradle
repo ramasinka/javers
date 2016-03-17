@@ -1,0 +1,48 @@
+dependencies {
+    compile project(':javers-core')
+    compile 'org.polyjdbc:polyjdbc:0.6.1'
+    compile 'com.google.guava:guava:18.0'
+
+    testCompile project(path: ":javers-core", configuration: "testArtifacts")
+
+    //required for @javax.persistence.Id ann in SnapshotEntity.class
+    testCompile 'org.hibernate.javax.persistence:hibernate-jpa-2.1-api:1.0.0.Final'
+
+    testCompile 'commons-dbcp:commons-dbcp:1.4'
+    testCompile 'com.h2database:h2:1.4.187'
+    testCompile 'org.postgresql:postgresql:9.4-1201-jdbc41'
+    testCompile 'mysql:mysql-connector-java:5.1.36'
+    testCompile 'com.google.guava:guava:18.0'
+    testCompile 'org.codehaus.gpars:gpars:1.2.1'
+}
+
+task integrationTest(type: Test) {
+    filter {
+        includeTestsMatching 'org.javers.repository.sql.integration.opendatabases.*'
+    }
+}
+
+task integrationTestMs(type: Test) {
+    dependencies{
+        testCompile files('../libs/sqljdbc4.jar') //sqljdbc4.jar should be manually copied to project /libs and .gitingored
+    }
+    filter {
+        includeTestsMatching 'org.javers.repository.sql.integration.mssql.*'
+    }
+}
+
+task integrationTestOracle(type: Test) {
+    dependencies{
+        testCompile files('../libs/ojdbc6.jar') //ojdbc6.jar should be manually copied to project /libs and .gitingored
+        testCompile files('../libs/xdb6.jar')
+    }
+    filter {
+        includeTestsMatching 'org.javers.repository.sql.integration.oracle.*'
+    }
+}
+
+test {
+    exclude 'org/javers/repository/sql/integration/**'
+}
+
+

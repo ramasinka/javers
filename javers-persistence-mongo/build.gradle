@@ -1,0 +1,22 @@
+dependencies {
+    compile project(':javers-core')
+    compile "org.mongodb:mongo-java-driver:$mongoJavaDriverVersion"
+
+    testCompile 'com.google.guava:guava:18.0'
+    testCompile 'org.hibernate.javax.persistence:hibernate-jpa-2.1-api:1.0.0.Final'
+    testCompile project(path: ":javers-core", configuration: "testArtifacts")
+    testCompile "com.github.fakemongo:fongo:$fongoVersion"
+}
+
+task integrationTest(type: Test) {
+    filter {
+        includeTestsMatching 'org.javers.repository.mongo.integration.**'
+    }
+    testLogging {
+        showStandardStreams = true
+    }
+}
+
+test {
+    exclude 'org/javers/repository/mongo/integration/**'
+}
