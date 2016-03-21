@@ -34,7 +34,7 @@ public class BasicCommitExample {
         // when:
         List<CdoSnapshot> snapshots = javers.findSnapshots(
             QueryBuilder.byInstanceId("bob", Person.class).build());
-
+    System.out.print(snapshots);
         // then:
         // there should be two Snapshots with Bob's state
         assertThat(snapshots).hasSize(2);

@@ -19,6 +19,7 @@ public class CommitFactoryModule extends InstantiatingModule {
         return (Collection)Lists.asList(
                 //TODO Romas - replace by JsonCommitFactory
                 CommitFactory.class,
+
                 CommitSeqGenerator.class
         );
     }

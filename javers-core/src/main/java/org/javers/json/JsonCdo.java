@@ -15,7 +15,7 @@ import java.util.Map;
 public class JsonCdo extends Cdo {
     private final Map<String, Object> properties;
 
-    public JsonCdo(GlobalId globalId, ManagedType managedType, Map<String, Object> properties) {
+    public JsonCdo(Map<String, Object> properties, GlobalId globalId, ManagedType managedType ) {
         super(globalId, managedType);
         this.properties = properties;
         Validate.argumentsAreNotNull(properties, managedType);

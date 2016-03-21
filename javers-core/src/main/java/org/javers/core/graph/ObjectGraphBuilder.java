@@ -19,7 +19,7 @@ import static org.javers.common.validation.Validate.argumentIsNotNull;
  *
  * @author bartosz walacik
  */
-class ObjectGraphBuilder {
+public class ObjectGraphBuilder {
     private static final Logger logger = LoggerFactory.getLogger(ObjectGraphBuilder.class);
 
     private final TypeMapper typeMapper;

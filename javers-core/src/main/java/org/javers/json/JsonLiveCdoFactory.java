@@ -17,11 +17,9 @@ public class JsonLiveCdoFactory extends LiveCdoFactory {
         super(globalIdFactory, objectAccessHook, typeMapper);
     }
 
-    @Override
-    public Cdo create(Object jsonCdo, OwnerContext owner) {
-        Map<String, Object> properties = null;
-        Object jsonCdoAccessed = objectAccessHook.access(jsonCdo);
+    public Cdo create(Map<String, Object> properties, OwnerContext owner) {
+        Object jsonCdoAccessed = objectAccessHook.access(properties);
         GlobalId globalId = globalIdFactory.createId(jsonCdoAccessed, owner);
-        return new JsonCdo(globalId, typeMapper.getJaversManagedType(jsonCdoAccessed.getClass()),properties);
+        return new JsonCdo(properties,globalId,typeMapper.getJaversManagedType(properties.getClass()));
     }
 }

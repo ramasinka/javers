@@ -6,7 +6,7 @@ package org.javers.core.commit;
  *
  * @author bartosz walacik
  */
-class CommitSeqGenerator {
+public class CommitSeqGenerator {
     private HandedOutIds handedOut = new HandedOutIds();
 
     public synchronized CommitId nextId(CommitId head)

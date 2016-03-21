@@ -34,7 +34,7 @@ public final class Commit {
     private final List<CdoSnapshot> snapshots;
     private final Diff diff;
 
-    Commit(CommitMetadata commitMetadata, List<CdoSnapshot> snapshots, Diff diff) {
+    public Commit(CommitMetadata commitMetadata, List<CdoSnapshot> snapshots, Diff diff) {
         Validate.argumentsAreNotNull(commitMetadata, snapshots, diff);
         this.commitMetadata = commitMetadata;
         this.snapshots = snapshots;

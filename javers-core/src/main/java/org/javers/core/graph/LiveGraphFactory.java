@@ -44,7 +44,7 @@ public class LiveGraphFactory {
         return liveCdoFactory.create(cdo, null);
     }
 
-    private Object wrapTopLevelContainer(Object handle){
+    public Object wrapTopLevelContainer(Object handle){
         if (handle instanceof  Map){
             return new MapWrapper((Map)handle);
         }

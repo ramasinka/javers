@@ -45,7 +45,6 @@ public class JsonBasicCommitTest {
         javers.commit("user", jsonEntity);
 
         List<CdoSnapshot> snapshots = javers.findSnapshots(QueryBuilder.byJsonInstanceId(jsonEntity.get("id"), testEntityType).build());
-
         assertThat(snapshots).hasSize(2);
     }
 
@@ -61,7 +60,7 @@ public class JsonBasicCommitTest {
         javers.commit("user", jsonEntity);
 
         List<CdoSnapshot> snapshots = javers.findSnapshots(QueryBuilder.byJsonInstanceId(jsonEntity.get("id"), testEntityType).limit(10).build());
-
+        System.out.print(jsonEntity);
         assertThat(snapshots).hasSize(2);
         CdoSnapshot newState = snapshots.get(0);
         CdoSnapshot oldState = snapshots.get(1);
