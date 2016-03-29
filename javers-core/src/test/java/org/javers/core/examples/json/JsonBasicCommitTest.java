@@ -57,7 +57,7 @@ public class JsonBasicCommitTest {
 
         jsonEntity.put("name", nameNew);
 
-        javers.commit("user", jsonEntity);
+        //javers.commit("user", jsonEntity);
 
         List<CdoSnapshot> snapshots = javers.findSnapshots(QueryBuilder.byJsonInstanceId(jsonEntity.get("id"), testEntityType).limit(10).build());
         System.out.print(jsonEntity);

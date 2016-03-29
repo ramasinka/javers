@@ -47,8 +47,6 @@ public class JsonCommitFactory extends CommitFactory {
     }
 
     public Commit createTerminalByGlobalId(String author, GlobalId removedId) {
-        Validate.argumentsAreNotNull(author, removedId);
-
         Optional<CdoSnapshot> previousSnapshot = javersRepository.getLatest(removedId);
         if (previousSnapshot.isEmpty()) {
             throw new JaversException(JaversExceptionCode.CANT_DELETE_OBJECT_NOT_FOUND, removedId.value());

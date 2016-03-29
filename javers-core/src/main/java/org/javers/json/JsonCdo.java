@@ -3,27 +3,26 @@ package org.javers.json;
 import org.javers.common.collections.Defaults;
 import org.javers.common.collections.Optional;
 import org.javers.common.validation.Validate;
-import org.javers.core.commit.CommitMetadata;
-import org.javers.core.metamodel.object.Cdo;
+import org.javers.core.metamodel.object.CdoWrapper;
 import org.javers.core.metamodel.object.GlobalId;
 import org.javers.core.metamodel.property.Property;
 import org.javers.core.metamodel.type.ManagedType;
 
-import java.util.List;
+import java.sql.Wrapper;
 import java.util.Map;
 
-public class JsonCdo extends Cdo {
-    private final Map<String, Object> properties;
-
-    public JsonCdo(Map<String, Object> properties, GlobalId globalId, ManagedType managedType ) {
-        super(globalId, managedType);
+public class JsonCdo extends CdoWrapper {
+    private final Map<Object, Object> properties;
+    private final Object wrappedCdo;
+    public JsonCdo(Object wrappedCdo, GlobalId globalId, ManagedType managedType, Map<Object, Object> properties) {
+        super(wrappedCdo, globalId, managedType);
         this.properties = properties;
-        Validate.argumentsAreNotNull(properties, managedType);
+        this.wrappedCdo = wrappedCdo;
     }
 
     @Override
     public Optional<Object> getWrappedCdo() {
-        return null;
+        return Optional.of(wrappedCdo);
     }
 
     @Override

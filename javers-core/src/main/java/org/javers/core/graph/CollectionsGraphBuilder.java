@@ -6,7 +6,7 @@ import org.javers.core.metamodel.type.TypeMapper;
 /**
  * @author pawelszymczyk
  */
-class CollectionsGraphBuilder {
+public class CollectionsGraphBuilder {
     private final CollectionsCdoFactory collectionsCdoFactory;
     private final ObjectGraphBuilder objectGraphBuilder;
 

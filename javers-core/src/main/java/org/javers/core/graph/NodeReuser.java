@@ -80,6 +80,6 @@ class NodeReuser {
         if (cdo.getGlobalId() instanceof InstanceId) {
             return cdo.getGlobalId();
         }
-        return System.identityHashCode(cdo.getWrappedCdo().get());
+        return System.identityHashCode(cdo);
     }
 }

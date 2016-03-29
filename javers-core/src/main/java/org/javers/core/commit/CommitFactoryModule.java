@@ -2,6 +2,7 @@ package org.javers.core.commit;
 
 import org.javers.common.collections.Lists;
 import org.javers.core.pico.InstantiatingModule;
+import org.javers.json.JsonCommitFactory;
 import org.picocontainer.MutablePicoContainer;
 
 import java.util.Collection;
@@ -18,8 +19,7 @@ public class CommitFactoryModule extends InstantiatingModule {
     protected Collection<Class> getImplementations() {
         return (Collection)Lists.asList(
                 //TODO Romas - replace by JsonCommitFactory
-                CommitFactory.class,
-
+                JsonCommitFactory.class,
                 CommitSeqGenerator.class
         );
     }

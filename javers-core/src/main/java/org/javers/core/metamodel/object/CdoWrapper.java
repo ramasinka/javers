@@ -18,7 +18,6 @@ public class CdoWrapper extends Cdo {
 
     public CdoWrapper(Object wrappedCdo, GlobalId globalId, ManagedType managedType) {
         super(globalId, managedType);
-        argumentsAreNotNull(wrappedCdo, managedType);
         argumentCheck(managedType.isInstance(wrappedCdo), "wrappedCdo is not an instance of given managedClass");
 
         this.wrappedCdo = wrappedCdo;
@@ -26,7 +25,6 @@ public class CdoWrapper extends Cdo {
 
     @Override
     public Object getPropertyValue(String propertyName) {
-        Validate.argumentIsNotNull(propertyName);
         Property property = getManagedType().getProperty(propertyName);
         return property.get(wrappedCdo);
     }
