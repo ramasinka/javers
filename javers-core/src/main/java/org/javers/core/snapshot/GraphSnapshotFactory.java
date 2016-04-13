@@ -2,12 +2,14 @@ package org.javers.core.snapshot;
 
 import org.javers.common.collections.Optional;
 import org.javers.common.validation.Validate;
+import org.javers.core.Javers;
 import org.javers.core.commit.CommitMetadata;
 import org.javers.core.graph.LiveGraph;
 import org.javers.core.graph.ObjectNode;
 import org.javers.core.metamodel.object.CdoSnapshot;
 import org.javers.core.metamodel.object.CdoWrapper;
 import org.javers.core.metamodel.object.SnapshotFactory;
+import org.javers.json.JsonCdo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,7 +59,7 @@ class GraphSnapshotFactory {
     }
 
     private CdoSnapshot createFreshSnapshot(boolean initial, ObjectNode node, CommitMetadata commitMetadata, Optional<CdoSnapshot> previous){
-        CdoWrapper cdoWrapper = (CdoWrapper)node.getCdo();
+        JsonCdo cdoWrapper = (JsonCdo) node.getCdo();
         if (initial){
             return snapshotFactory.createInitial(cdoWrapper, commitMetadata);
         }

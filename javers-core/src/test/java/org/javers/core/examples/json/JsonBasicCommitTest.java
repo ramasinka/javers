@@ -36,7 +36,7 @@ public class JsonBasicCommitTest {
         jsonEntity.put("_links", links);
     }
 
-    @Test
+/*    @Test
     public void shouldCommitToJaversRepository() {
         javers.commit("user", jsonEntity);
 
@@ -46,8 +46,7 @@ public class JsonBasicCommitTest {
 
         List<CdoSnapshot> snapshots = javers.findSnapshots(QueryBuilder.byJsonInstanceId(jsonEntity.get("id"), testEntityType).build());
         assertThat(snapshots).hasSize(2);
-    }
-
+    }*/
     @Test
     public void shouldListStateHistory() {
         String nameOld = (String) jsonEntity.get("name");
@@ -57,7 +56,7 @@ public class JsonBasicCommitTest {
 
         jsonEntity.put("name", nameNew);
 
-        //javers.commit("user", jsonEntity);
+        javers.commit("user", jsonEntity);
 
         List<CdoSnapshot> snapshots = javers.findSnapshots(QueryBuilder.byJsonInstanceId(jsonEntity.get("id"), testEntityType).limit(10).build());
         System.out.print(jsonEntity);
@@ -68,7 +67,7 @@ public class JsonBasicCommitTest {
         assertThat(newState.getPropertyValue("name")).isEqualTo(nameNew);
     }
 
-    @Test
+  /*  @Test
     public void shouldListChangeHistory() {
         String nameOld = (String) jsonEntity.get("name");
         javers.commit("user", jsonEntity);
@@ -85,5 +84,5 @@ public class JsonBasicCommitTest {
         assertThat(change.getPropertyName()).isEqualTo("name");
         assertThat(change.getLeft()).isEqualTo(nameOld);
         assertThat(change.getRight()).isEqualTo(nameNew);
-    }
+    }*/
 }

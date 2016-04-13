@@ -5,11 +5,18 @@ import org.javers.common.exception.JaversExceptionCode;
 import org.javers.common.validation.Validate;
 import org.javers.core.graph.ObjectAccessHook;
 import org.javers.core.metamodel.type.*;
+import org.javers.json.JsonCdo;
 import org.javers.json.JsonInstanceIdDTO;
+import org.javers.json.JsonLiveGraphFactory;
 import org.javers.repository.jql.GlobalIdDTO;
 import org.javers.repository.jql.InstanceIdDTO;
 import org.javers.repository.jql.UnboundedValueObjectIdDTO;
 import org.javers.repository.jql.ValueObjectIdDTO;
+
+import java.sql.Wrapper;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.StringTokenizer;
 
 /**
  * @author bartosz walacik
@@ -38,9 +45,17 @@ public class GlobalIdFactory {
 
         targetCdo = objectAccessHook.access(targetCdo);
         ManagedType targetManagedType = typeMapper.getJaversManagedType(targetCdo.getClass());
-
         //TODO Romas - add if for json object returning InstanceId with id from map
+        JsonLiveGraphFactory.MapWrapper mapWrapper = (JsonLiveGraphFactory.MapWrapper) targetCdo;
+        HashMap map = (HashMap) mapWrapper.getMap();
+        Object jsonEntityId = map.get("id");
+        HashMap _links = (HashMap) map.get("_links");
+        HashMap self = (HashMap) _links.get("self");
+        Object classTypeValue = self.get("classType");
+        if(classTypeValue instanceof String){
+                return new InstanceId((String)classTypeValue,jsonEntityId);
 
+        }
         if (targetManagedType instanceof EntityType) {
             return InstanceId.createFromInstance(targetCdo, (EntityType) targetManagedType);
         }
@@ -50,6 +65,7 @@ public class GlobalIdFactory {
         }
 
         if (targetManagedType instanceof ValueObjectType && hasOwner(owner)) {
+
             return new ValueObjectId(targetManagedType.getName(), owner.getGlobalId(), owner.getPath());
         }
 

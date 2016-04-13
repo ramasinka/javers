@@ -76,15 +76,15 @@ public class JsonLiveGraphFactory extends LiveGraphFactory {
         return ArrayWrapper.class;
     }
 
-    static class MapWrapper {
-        private final Map<Object,Object> map;
-        public Map getMap(){
-            return map;
-        }
-        MapWrapper(Map map) {
-            this.map = map;
-        }
+      public static class MapWrapper {
+         Map<String,String> properties;
 
+        MapWrapper(Map map) {
+            this.properties = map;
+        }
+        public Map getMap(){
+            return properties;
+        }
     }
 
 

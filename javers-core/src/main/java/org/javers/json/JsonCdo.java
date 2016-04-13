@@ -25,11 +25,9 @@ public class JsonCdo extends CdoWrapper {
         return Optional.of(wrappedCdo);
     }
 
-    @Override
-    public boolean isNull(Property property) {
-        return false;
+    public Object getProperties(){
+        return properties;
     }
-
     @Override
     public Object getPropertyValue(Property property) {
         Validate.argumentIsNotNull(property);
@@ -40,9 +38,15 @@ public class JsonCdo extends CdoWrapper {
         return val;
     }
 
+
     @Override
     public Object getPropertyValue(String propertyName) {
-        Validate.argumentIsNotNull(propertyName);
-        return properties.get(propertyName);
+        Property property = getManagedType().getProperty(propertyName);
+        return property.get(wrappedCdo);
+    }
+
+    @Override
+    public boolean isNull(Property property) {
+        return property.isNull(wrappedCdo);
     }
 }
