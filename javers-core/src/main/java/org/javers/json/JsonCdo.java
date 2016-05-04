@@ -9,23 +9,23 @@ import org.javers.core.metamodel.property.Property;
 import org.javers.core.metamodel.type.ManagedType;
 
 import java.sql.Wrapper;
+import java.util.HashMap;
 import java.util.Map;
 
 public class JsonCdo extends CdoWrapper {
-    private final Map<Object, Object> properties;
+    private final Map<String, Object> properties;
     private final Object wrappedCdo;
-    public JsonCdo(Object wrappedCdo, GlobalId globalId, ManagedType managedType, Map<Object, Object> properties) {
-        super(wrappedCdo, globalId, managedType);
+    public JsonCdo(Object wrappedCdo, GlobalId globalId, JsonManagedType jsonManagedType, Map<String, Object> properties) {
+        super(wrappedCdo, globalId, jsonManagedType);
         this.properties = properties;
         this.wrappedCdo = wrappedCdo;
     }
-
     @Override
     public Optional<Object> getWrappedCdo() {
         return Optional.of(wrappedCdo);
     }
 
-    public Object getProperties(){
+    public Map<String,Object> getProperties(){
         return properties;
     }
     @Override
@@ -38,11 +38,13 @@ public class JsonCdo extends CdoWrapper {
         return val;
     }
 
-
     @Override
     public Object getPropertyValue(String propertyName) {
-        Property property = getManagedType().getProperty(propertyName);
-        return property.get(wrappedCdo);
+       // JsonProperty property = (JsonProperty) getManagedType().getProperty(propertyName);
+        Object ob = properties.get(propertyName);
+        //JsonProperty jsonProperty = new JsonProperty((String) properties.get(propertyName));
+        //return property.get(wrappedCdo);
+        return ob;
     }
 
     @Override

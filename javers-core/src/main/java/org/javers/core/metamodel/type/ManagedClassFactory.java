@@ -11,6 +11,7 @@ import org.javers.core.metamodel.clazz.EntityDefinition;
 import org.javers.core.metamodel.property.Property;
 import org.javers.core.metamodel.scanner.ClassScan;
 import org.javers.core.metamodel.scanner.ClassScanner;
+import org.javers.json.JsonLiveGraphFactory;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -35,6 +36,12 @@ class ManagedClassFactory {
     }
 
     ManagedClass create(ClientsClassDefinition def){
+        if(def.getBaseJavaClass().getName().equals(JsonLiveGraphFactory.MapWrapper.class.getName())){
+            ClassScan scan = classScanner.scan(def.getBaseJavaClass());
+            List<Property> filtered = filterIgnored(scan.getProperties(), def);
+            filtered = filterIgnoredType(filtered, def.getBaseJavaClass());
+            return new ManagedClass(def.getBaseJavaClass(), filtered, scan.getLooksLikeId());
+        }
         ClassScan scan = classScanner.scan(def.getBaseJavaClass());
         List<Property> filtered = filterIgnored(scan.getProperties(), def);
         filtered = filterIgnoredType(filtered, def.getBaseJavaClass());

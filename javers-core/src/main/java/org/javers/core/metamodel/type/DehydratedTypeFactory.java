@@ -12,12 +12,12 @@ import java.util.List;
  *
  * @author bartosz.walacik
  */
-class DehydratedTypeFactory {
+public class DehydratedTypeFactory {
     private static Class GLOBAL_ID_ARRAY_TYPE = new GlobalId[]{}.getClass();
 
     private TypeMapper mapper;
 
-    DehydratedTypeFactory(TypeMapper mapper) {
+    public DehydratedTypeFactory(TypeMapper mapper) {
         this.mapper = mapper;
     }
 

@@ -4,6 +4,7 @@ import org.javers.core.graph.ObjectNode;
 import org.javers.core.metamodel.object.GlobalId;
 import org.javers.core.metamodel.property.Property;
 import org.javers.core.metamodel.type.ManagedType;
+import org.javers.json.JsonProperty;
 
 import java.util.List;
 
@@ -14,7 +15,7 @@ public interface NodePair {
 
     ObjectNode getRight();
 
-    List<Property> getProperties();
+    List<JsonProperty> getProperties();
 
     Object getLeftPropertyValue(Property property);
 

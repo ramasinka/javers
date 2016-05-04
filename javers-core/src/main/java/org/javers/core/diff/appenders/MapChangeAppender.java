@@ -10,7 +10,10 @@ import org.javers.core.metamodel.object.GlobalIdFactory;
 import org.javers.core.metamodel.object.OwnerContext;
 import org.javers.core.metamodel.property.Property;
 import org.javers.core.metamodel.type.*;
+
+import java.lang.reflect.Type;
 import java.util.*;
+
 import static org.javers.common.exception.JaversExceptionCode.VALUE_OBJECT_IS_NOT_SUPPORTED_AS_MAP_KEY;
 
 /**
@@ -28,33 +31,30 @@ class MapChangeAppender extends CorePropertyChangeAppender<MapChange> {
 
     @Override
     public boolean supports(JaversType propertyType) {
-        if (!(propertyType instanceof MapType)){
+        if (!(propertyType instanceof MapType)) {
             return false;
         }
 
-        MapContentType mapContentType = typeMapper.getMapContentType((MapType)propertyType);
-        if (mapContentType.getKeyType() instanceof ValueObjectType){
+        MapContentType mapContentType = typeMapper.getMapContentType((MapType) propertyType);
+        if (mapContentType.getKeyType() instanceof ValueObjectType) {
             throw new JaversException(VALUE_OBJECT_IS_NOT_SUPPORTED_AS_MAP_KEY,
-                                      propertyType);
+                    propertyType);
         }
         return true;
     }
 
     @Override
     public MapChange calculateChanges(NodePair pair, Property property) {
-        Map leftRawMap =  (Map)pair.getLeftPropertyValue(property);
-        Map rightRawMap = (Map)pair.getRightPropertyValue(property);
-
+        Map leftRawMap = (Map) pair.getLeftPropertyValue(property);
+        Map rightRawMap = (Map) pair.getRightPropertyValue(property);
         MapType mapType = typeMapper.getPropertyType(property);
         MapContentType mapContentType = typeMapper.getMapContentType(mapType);
-
         OwnerContext owner = new OwnerContext(pair.getGlobalId(), property.getName());
         List<EntryChange> changes = calculateEntryChanges(leftRawMap, rightRawMap, owner, mapContentType);
 
-        if (!changes.isEmpty()){
+        if (!changes.isEmpty()) {
             return new MapChange(pair.getGlobalId(), property.getName(), changes);
-        }
-        else {
+        } else {
             return null;
         }
     }
@@ -66,7 +66,7 @@ class MapChangeAppender extends CorePropertyChangeAppender<MapChange> {
 
         DehydrateMapFunction dehydrateFunction = new DehydrateMapFunction(globalIdFactory, mapContentType);
 
-        Map leftMap =  MapType.mapStatic(leftRawMap, dehydrateFunction, owner);
+        Map leftMap = MapType.mapStatic(leftRawMap, dehydrateFunction, owner);
         Map rightMap = MapType.mapStatic(rightRawMap, dehydrateFunction, owner);
 
         if (Objects.equals(leftMap, rightMap)) {
@@ -76,22 +76,22 @@ class MapChangeAppender extends CorePropertyChangeAppender<MapChange> {
         List<EntryChange> changes = new ArrayList<>();
 
         for (Object commonKey : Maps.commonKeys(leftMap, rightMap)) {
-            Object leftVal  = leftMap.get(commonKey);
+            Object leftVal = leftMap.get(commonKey);
             Object rightVal = rightMap.get(commonKey);
 
-            if (!Objects.equals(leftVal, rightVal)){
-                changes.add( new EntryValueChange(commonKey, leftVal, rightVal));
+            if (!Objects.equals(leftVal, rightVal)) {
+                changes.add(new EntryValueChange(commonKey, leftVal, rightVal));
             }
         }
 
-        for (Object addedKey : Maps.keysDifference(rightMap,leftMap)) {
-            Object addedValue  = rightMap.get(addedKey);
-            changes.add( new EntryAdded(addedKey, addedValue));
+        for (Object addedKey : Maps.keysDifference(rightMap, leftMap)) {
+            Object addedValue = rightMap.get(addedKey);
+            changes.add(new EntryAdded(addedKey, addedValue));
         }
 
         for (Object removedKey : Maps.keysDifference(leftMap, rightMap)) {
-            Object removedValue  = leftMap.get(removedKey);
-            changes.add( new EntryRemoved(removedKey, removedValue));
+            Object removedValue = leftMap.get(removedKey);
+            changes.add(new EntryRemoved(removedKey, removedValue));
         }
 
         return changes;

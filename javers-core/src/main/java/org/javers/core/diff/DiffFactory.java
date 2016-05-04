@@ -21,6 +21,7 @@ import org.javers.core.metamodel.type.PrimitiveType;
 import org.javers.core.metamodel.type.ManagedType;
 import org.javers.core.metamodel.type.TypeMapper;
 import org.javers.core.metamodel.type.ValueType;
+import org.javers.json.JsonProperty;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -138,26 +139,19 @@ public class DiffFactory {
 
     /* Node scope appender */
     private void appendPropertyChanges(DiffBuilder diff, NodePair pair, final Optional<CommitMetadata> commitMetadata) {
-        List<Property> nodeProperties = pair.getProperties();
-        for (Property property : nodeProperties) {
-
+        List<JsonProperty> nodeProperties = pair.getProperties();
+        for (JsonProperty property : nodeProperties) {
             //optimization, skip all appenders if null on both sides
             if (pair.isNullOnBothSides(property)) {
                 continue;
             }
-
-            JaversType javersType = typeMapper.getPropertyType(property);
-
-            appendChanges(diff, pair, property, javersType, commitMetadata);
+            //JaversType javersType = typeMapper.getPropertyType(property);
+            appendChanges(diff, pair, property, commitMetadata);
         }
     }
 
-    private void appendChanges(DiffBuilder diff, NodePair pair, Property property, JaversType javersType, Optional<CommitMetadata> commitMetadata) {
+    private void appendChanges(DiffBuilder diff, NodePair pair, JsonProperty property, Optional<CommitMetadata> commitMetadata) {
         for (PropertyChangeAppender appender : propertyChangeAppender) {
-            if (! appender.supports(javersType)){
-                continue;
-            }
-
             final Change change = appender.calculateChanges(pair, property);
             if (change != null) {
                 diff.addChange(change, pair.getRight().wrappedCdo());

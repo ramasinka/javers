@@ -44,29 +44,16 @@ public class GlobalIdFactory {
         Validate.argumentsAreNotNull(targetCdo);
 
         targetCdo = objectAccessHook.access(targetCdo);
-        ManagedType targetManagedType = typeMapper.getJaversManagedType(targetCdo.getClass());
         //TODO Romas - add if for json object returning InstanceId with id from map
         JsonLiveGraphFactory.MapWrapper mapWrapper = (JsonLiveGraphFactory.MapWrapper) targetCdo;
-        HashMap map = (HashMap) mapWrapper.getMap();
+        HashMap<String,Object> map = (HashMap) mapWrapper.getMap();
         Object jsonEntityId = map.get("id");
-        HashMap _links = (HashMap) map.get("_links");
-        HashMap self = (HashMap) _links.get("self");
+        HashMap <String,Object>_links = (HashMap) map.get("_links");
+        HashMap <String,Object>self = (HashMap) _links.get("self");
         Object classTypeValue = self.get("classType");
         if(classTypeValue instanceof String){
                 return new InstanceId((String)classTypeValue,jsonEntityId);
 
-        }
-        if (targetManagedType instanceof EntityType) {
-            return InstanceId.createFromInstance(targetCdo, (EntityType) targetManagedType);
-        }
-
-        if (targetManagedType instanceof ValueObjectType && hasNoOwner(owner)) {
-            return new UnboundedValueObjectId(targetManagedType.getName());
-        }
-
-        if (targetManagedType instanceof ValueObjectType && hasOwner(owner)) {
-
-            return new ValueObjectId(targetManagedType.getName(), owner.getGlobalId(), owner.getPath());
         }
 
         throw new JaversException(JaversExceptionCode.NOT_IMPLEMENTED);

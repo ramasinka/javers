@@ -16,7 +16,7 @@ import static org.slf4j.LoggerFactory.getLogger;
 /**
  * @author bartosz walacik
  */
-class TypeFactory {
+public class TypeFactory {
     private static final Logger logger = getLogger(TypeFactory.class);
 
     private final ClassScanner classScanner;

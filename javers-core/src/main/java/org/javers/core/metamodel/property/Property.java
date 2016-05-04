@@ -16,14 +16,18 @@ public class Property {
     public static final String ID_ANN = "Id";
     public static final String EMBEDDED_ID_ANN = "EmbeddedId";
 
-    private transient final JaversMember member;
-    private transient final boolean hasTransientAnn;
+    private transient  JaversMember member;
+    private transient  boolean hasTransientAnn;
 
     public Property(JaversMember member, boolean hasTransientAnn){
         argumentIsNotNull(member);
         this.member = member;
         this.hasTransientAnn = hasTransientAnn;
     }
+
+    public Property() {
+    }
+
 
     public Type getGenericType() {
         return member.getGenericResolvedType();
@@ -82,15 +86,15 @@ public class Property {
         return member.equals(that.member);
     }
 
-    @Override
+ /*   @Override
     public int hashCode() {
         return member.hashCode();
-    }
+    }*/
 
-    @Override
+    /*@Override
     public String toString() {
         return member.toString();
-    }
+    }*/
 
     public JaversMember getMember() {
         return member;

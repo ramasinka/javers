@@ -5,6 +5,7 @@ import org.javers.core.graph.ObjectNode;
 import org.javers.core.metamodel.object.GlobalId;
 import org.javers.core.metamodel.property.Property;
 import org.javers.core.metamodel.type.ManagedType;
+import org.javers.json.JsonProperty;
 
 import java.util.List;
 
@@ -37,7 +38,7 @@ class FakeNodePair implements NodePair {
     }
 
     @Override
-    public List<Property> getProperties() {
+    public List<JsonProperty> getProperties() {
         return getManagedType().getProperties();
     }
 

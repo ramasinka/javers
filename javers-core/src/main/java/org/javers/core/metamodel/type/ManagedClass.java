@@ -13,13 +13,13 @@ import static org.javers.common.validation.Validate.argumentsAreNotNull;
  * 
  * @author bartosz walacik
  */
-class ManagedClass {
+public class ManagedClass {
     private final Class<?> baseJavaClass;
     private final Map<String, Property> propertiesByName;
     private final List<Property> managedProperties;
     private final List<Property> looksLikeId;
 
-    ManagedClass(Class baseJavaClass, List<Property> allProperties, List<Property> looksLikeId) {
+    public ManagedClass(Class baseJavaClass, List<Property> allProperties, List<Property> looksLikeId) {
         argumentsAreNotNull(baseJavaClass, allProperties, looksLikeId);
 
         this.baseJavaClass = baseJavaClass;
@@ -35,10 +35,12 @@ class ManagedClass {
         }
     }
 
+
+
     /**
      * returns all managed properties
      */
-    List<Property> getManagedProperties() {
+    public List<Property> getManagedProperties() {
         return Collections.unmodifiableList(managedProperties);
     }
 
@@ -46,14 +48,14 @@ class ManagedClass {
         return Collections.unmodifiableList(looksLikeId);
     }
 
-    Set<String> getPropertyNames(){
+    public Set<String> getPropertyNames(){
         return Collections.unmodifiableSet(propertiesByName.keySet());
     }
 
     /**
      * returns managed properties subset
      */
-    List<Property> getManagedProperties(Predicate<Property> query) {
+    public List<Property> getManagedProperties(Predicate<Property> query) {
         List<Property> retProperties = new ArrayList<>();
 
         for (Property property : managedProperties) {
@@ -70,7 +72,7 @@ class ManagedClass {
      *
      * @throws JaversException PROPERTY_NOT_FOUND
      */
-    Property getProperty(String withName) {
+    public Property getProperty(String withName) {
         Validate.argumentIsNotNull(withName);
         if (!propertiesByName.containsKey(withName)){
             throw new JaversException(PROPERTY_NOT_FOUND, withName, baseJavaClass.getName());

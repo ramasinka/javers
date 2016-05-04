@@ -6,6 +6,8 @@ import org.javers.common.exception.JaversException;
 import org.javers.core.commit.CommitMetadata;
 import org.javers.core.metamodel.property.Property;
 import org.javers.core.metamodel.type.*;
+import org.javers.json.JsonCdo;
+import org.javers.json.JsonProperty;
 
 import java.util.Objects;
 
@@ -34,7 +36,7 @@ public class SnapshotFactory {
                 .build();
     }
 
-    public CdoSnapshot createInitial(CdoWrapper cdoWrapper, CommitMetadata commitMetadata) {
+    public CdoSnapshot createInitial(JsonCdo cdoWrapper, CommitMetadata commitMetadata) {
         return createSnapshotState(cdoWrapper, commitMetadata)
                 .withType(INITIAL)
                 .markAllAsChanged()
@@ -42,7 +44,7 @@ public class SnapshotFactory {
                 .build();
     }
 
-    public CdoSnapshot createUpdate(CdoWrapper cdoWrapper, CdoSnapshot previous, CommitMetadata commitMetadata) {
+    public CdoSnapshot createUpdate(JsonCdo cdoWrapper, CdoSnapshot previous, CommitMetadata commitMetadata) {
         return createSnapshotState(cdoWrapper, commitMetadata)
                 .withType(UPDATE)
                 .markChanged(previous)
@@ -71,20 +73,20 @@ public class SnapshotFactory {
         return  propertyType.map(propertyVal, dehydratorMapFunction, owner);
     }
 
-    private CdoSnapshotBuilder createSnapshotState(CdoWrapper cdoWrapper, CommitMetadata commitMetadata){
+    private CdoSnapshotBuilder createSnapshotState(JsonCdo cdoWrapper, CommitMetadata commitMetadata){
         CdoSnapshotBuilder snapshotBuilder = cdoSnapshot(cdoWrapper.getGlobalId(), commitMetadata, cdoWrapper.getManagedType());
 
-        for (Property property : cdoWrapper.getManagedType().getProperties()) {
+        for (JsonProperty property : cdoWrapper.getManagedType().getProperties()) {
             Object propertyVal = cdoWrapper.getPropertyValue(property.getName());
-            if (Objects.equals(propertyVal, Defaults.defaultValue(property.getGenericType()))) {
+           /* if (Objects.equals(propertyVal, Defaults.defaultValue(property.getGenericType()))) {
                 continue;
-            }
-            snapshotBuilder.withPropertyValue(property, dehydrateProperty(property, propertyVal, cdoWrapper.getGlobalId()));
+            }*/
+            snapshotBuilder.withPropertyValue(property, propertyVal);
         }
         return snapshotBuilder;
     }
 
-    private Object dehydrateProperty(Property property, Object propertyVal, GlobalId id){
+    private Object dehydrateProperty(JsonProperty property, Object propertyVal, GlobalId id){
         JaversType propertyType = typeMapper.getPropertyType(property);
         OwnerContext owner = new OwnerContext(id, property.getName());
 

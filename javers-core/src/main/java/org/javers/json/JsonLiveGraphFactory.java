@@ -77,12 +77,12 @@ public class JsonLiveGraphFactory extends LiveGraphFactory {
     }
 
       public static class MapWrapper {
-         Map<String,String> properties;
+         private Map<String,Object> properties;
 
-        MapWrapper(Map map) {
+        MapWrapper(Map<String ,Object> map) {
             this.properties = map;
         }
-        public Map getMap(){
+        public Map<String,Object> getMap(){
             return properties;
         }
     }

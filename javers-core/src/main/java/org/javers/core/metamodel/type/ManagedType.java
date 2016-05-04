@@ -6,6 +6,7 @@ import org.javers.common.exception.JaversException;
 import org.javers.common.string.PrettyPrintBuilder;
 import org.javers.core.metamodel.object.GlobalId;
 import org.javers.core.metamodel.property.Property;
+import org.javers.json.JsonProperty;
 
 import java.lang.reflect.Type;
 import java.util.List;
@@ -14,10 +15,10 @@ import java.util.Set;
 /**
  * @author bartosz walacik
  */
-public abstract class ManagedType extends JaversType {
+public class ManagedType extends JaversType {
     private final ManagedClass managedClass;
 
-    ManagedType(ManagedClass managedClass) {
+    protected ManagedType(ManagedClass managedClass) {
         this(managedClass, Optional.<String>empty());
     }
 
@@ -26,7 +27,9 @@ public abstract class ManagedType extends JaversType {
         this.managedClass = managedClass;
     }
 
-    abstract ManagedType spawn(ManagedClass managedClass, Optional<String> typeName);
+    ManagedType spawn(ManagedClass managedClass, Optional<String> typeName) {
+        return null;
+    }
 
     @Override
     protected Type getRawDehydratedType() {
@@ -49,8 +52,9 @@ public abstract class ManagedType extends JaversType {
         return managedClass.getManagedProperties(query);
     }
 
-    public List<Property> getProperties() {
-        return managedClass.getManagedProperties();
+    public List<JsonProperty> getProperties() {
+        //return managedClass.getManagedProperties();
+        return null;
     }
 
     public Set<String> getPropertyNames(){
@@ -60,4 +64,6 @@ public abstract class ManagedType extends JaversType {
     ManagedClass getManagedClass() {
         return managedClass;
     }
+
+
 }

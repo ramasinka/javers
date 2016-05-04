@@ -20,13 +20,13 @@ import static org.javers.common.validation.Validate.argumentsAreNotNull;
  *
  * @author bartosz.walacik
  */
-class TypeMapperState {
+public class TypeMapperState {
     private final Map<Type, JaversType> mappedTypes = new ConcurrentHashMap<>();
     private final Map<DuckType, Class> mappedTypeNames = new ConcurrentHashMap<>();
     private final TypeFactory typeFactory;
     private final ValueType OBJECT_TYPE = new ValueType(Object.class);
 
-    TypeMapperState(TypeFactory typeFactory) {
+    public TypeMapperState(TypeFactory typeFactory) {
         this.typeFactory = typeFactory;
     }
 
@@ -34,7 +34,7 @@ class TypeMapperState {
      * @throws JaversException TYPE_NAME_NOT_FOUND if given typeName is not registered
      * @since 1.4
      */
-    Class getClassByTypeName(String typeName) {
+    public Class getClassByTypeName(String typeName) {
         return getClassByDuckType(new DuckType(typeName));
     }
 
@@ -42,7 +42,7 @@ class TypeMapperState {
      * @throws JaversException TYPE_NAME_NOT_FOUND if given typeName is not registered
      * @since 1.4
      */
-    Class getClassByDuckType(DuckType duckType) {
+    public Class getClassByDuckType(DuckType duckType) {
         argumentsAreNotNull(duckType);
 
         Class javaType = mappedTypeNames.get(duckType);
@@ -66,11 +66,11 @@ class TypeMapperState {
         throw new JaversException(JaversExceptionCode.TYPE_NAME_NOT_FOUND, duckType.getTypeName());
     }
 
-    boolean contains(Type javaType){
+    public boolean contains(Type javaType){
         return mappedTypes.get(javaType) != null;
     }
 
-    JaversType getJaversType(Type javaType) {
+    public JaversType getJaversType(Type javaType) {
         argumentIsNotNull(javaType);
 
         if (javaType == Object.class) {
@@ -89,7 +89,7 @@ class TypeMapperState {
         });
     }
 
-    void putIfAbsent(Type javaType, final JaversType jType) {
+    public void putIfAbsent(Type javaType, final JaversType jType) {
         computeIfAbsent(javaType, new Function<Type, JaversType>() {
             public JaversType apply(Type ignored) {
                 return jType;
@@ -97,7 +97,7 @@ class TypeMapperState {
         });
     }
 
-    void computeIfAbsent(final ClientsClassDefinition def) {
+    public void computeIfAbsent(final ClientsClassDefinition def) {
         computeIfAbsent(def.getBaseJavaClass(), new Function<Type, JaversType>() {
             public JaversType apply(Type ignored) {
                 return typeFactory.create(def);
