@@ -62,7 +62,7 @@ public class RealNodePair implements NodePair {
     }
 
     @Override
-    public List<JsonProperty> getProperties() {
+    public List<Property> getProperties() {
         return getManagedType().getProperties();
     }
 

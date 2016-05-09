@@ -15,7 +15,7 @@ public class JsonManagedType extends ManagedType {
     private Object jsonCdo;
     private ManagedClass managedClass;
     private Map<String,Object> jsonMap;
-    private List<JsonProperty> properties = new ArrayList<>();
+
 
     public JsonManagedType(ManagedClass managedClass, Object jsonCdo) {
         super(managedClass);
@@ -39,10 +39,10 @@ public class JsonManagedType extends ManagedType {
         return managedClass.getManagedProperties(query);
     }
 
-    public List<JsonProperty> getProperties() {
+    public List<Property> getProperties() {
+        List<Property> properties = new ArrayList<>();
         for (Object key : jsonMap.keySet()) {
-            JsonProperty jsonProperty = new JsonProperty((String) key,jsonMap.get(key).getClass());
-            properties.add(jsonProperty);
+            properties.add(new JsonProperty((String) key,jsonMap.get(key).getClass()));
         }
         return properties;
     }

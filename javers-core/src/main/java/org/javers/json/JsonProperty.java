@@ -3,7 +3,8 @@ package org.javers.json;
 import org.javers.common.reflection.JaversMember;
 import org.javers.core.metamodel.property.Property;
 
-import java.lang.reflect.Type;
+import java.lang.reflect.*;
+import java.util.*;
 
 /**
  * Created by Romcikas on 4/26/2016.
@@ -11,6 +12,7 @@ import java.lang.reflect.Type;
 public class JsonProperty extends Property {
     String name;
     Type jsonType;
+     Map<String, Object> map = new HashMap<String, Object>();
 
     public JsonProperty(JaversMember member, boolean hasTransientAnn) {
         super(member, hasTransientAnn);
@@ -28,6 +30,15 @@ public class JsonProperty extends Property {
 
     @Override
     public Type getGenericType() {
+           try {
+                Type type = map.getClass();
+               if(jsonType.equals(type) ){
+                   ParameterizedType pt = (ParameterizedType) JsonProperty.class.getDeclaredField("map").getGenericType();
+                   return pt;
+               }
+           } catch (NoSuchFieldException e) {
+               e.printStackTrace();
+           }
         return jsonType;
     }
 }

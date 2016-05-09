@@ -52,9 +52,9 @@ public class ManagedType extends JaversType {
         return managedClass.getManagedProperties(query);
     }
 
-    public List<JsonProperty> getProperties() {
-        //return managedClass.getManagedProperties();
-        return null;
+    public List<Property> getProperties() {
+        return managedClass.getManagedProperties();
+        //return null;
     }
 
     public Set<String> getPropertyNames(){

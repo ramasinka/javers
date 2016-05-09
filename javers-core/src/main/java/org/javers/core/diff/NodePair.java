@@ -15,7 +15,7 @@ public interface NodePair {
 
     ObjectNode getRight();
 
-    List<JsonProperty> getProperties();
+    List<Property> getProperties();
 
     Object getLeftPropertyValue(Property property);
 

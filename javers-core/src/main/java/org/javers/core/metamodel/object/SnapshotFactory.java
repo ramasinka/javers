@@ -76,7 +76,7 @@ public class SnapshotFactory {
     private CdoSnapshotBuilder createSnapshotState(JsonCdo cdoWrapper, CommitMetadata commitMetadata){
         CdoSnapshotBuilder snapshotBuilder = cdoSnapshot(cdoWrapper.getGlobalId(), commitMetadata, cdoWrapper.getManagedType());
 
-        for (JsonProperty property : cdoWrapper.getManagedType().getProperties()) {
+        for (Property property : cdoWrapper.getManagedType().getProperties()) {
             Object propertyVal = cdoWrapper.getPropertyValue(property.getName());
            /* if (Objects.equals(propertyVal, Defaults.defaultValue(property.getGenericType()))) {
                 continue;
