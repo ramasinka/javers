@@ -14,21 +14,22 @@ import java.util.*;
 public class JsonManagedType extends ManagedType {
     private Object jsonCdo;
     private ManagedClass managedClass;
-    private Map<String,Object> jsonMap;
+    private Map<String, Object> jsonMap;
+    private JsonProperty jsonProperty;
 
 
     public JsonManagedType(ManagedClass managedClass, Object jsonCdo) {
         super(managedClass);
-        this.jsonCdo = (JsonLiveGraphFactory.MapWrapper)jsonCdo;
+        this.jsonCdo = (JsonLiveGraphFactory.MapWrapper) jsonCdo;
         this.managedClass = managedClass;
         jsonMap = (HashMap) ((JsonLiveGraphFactory.MapWrapper) jsonCdo).getMap();
-}
+    }
 
     @Override
     public Property getProperty(String propertyName) {
         for (Object key : jsonMap.keySet()) {
-            if(key==propertyName){
-                return new JsonProperty((String) key,jsonMap.get(key).getClass());
+            if (key == propertyName) {
+                return new JsonProperty((String) key, jsonMap.get(key).getClass());
             }
         }
         return managedClass.getProperty(propertyName);
@@ -39,10 +40,11 @@ public class JsonManagedType extends ManagedType {
         return managedClass.getManagedProperties(query);
     }
 
+    @Override
     public List<Property> getProperties() {
         List<Property> properties = new ArrayList<>();
         for (Object key : jsonMap.keySet()) {
-            properties.add(new JsonProperty((String) key,jsonMap.get(key).getClass()));
+            properties.add(getProperty((String) key));
         }
         return properties;
     }
