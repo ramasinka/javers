@@ -162,7 +162,6 @@ public class JsonBasicCommitTest {
         assertThat(changes).hasSize(1);
         ArrayChange change = (ArrayChange) changes.get(0);
         assertThat(change.getPropertyName()).isEqualTo("friends");
-        //assertThat(change.getRight()).isEqualTo(friends);
     }
 
     @Test
