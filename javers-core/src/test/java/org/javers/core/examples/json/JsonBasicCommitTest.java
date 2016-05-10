@@ -5,11 +5,14 @@ import org.javers.core.JaversBuilder;
 import org.javers.core.diff.Change;
 import org.javers.core.diff.changetype.ValueChange;
 import org.javers.core.diff.changetype.container.ArrayChange;
+import org.javers.core.diff.changetype.container.ListChange;
+import org.javers.core.diff.changetype.map.MapChange;
 import org.javers.core.metamodel.object.CdoSnapshot;
 import org.javers.repository.jql.QueryBuilder;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -90,32 +93,21 @@ public class JsonBasicCommitTest {
     }
 
     @Test
-    public void shouldListAddInt() {
-        String nameOld = (String) jsonEntity.get("name");
-        String nameNew = "new name";
+    public void shouldFindChangesWhenAddInt() {
         int age = 23;
 
         javers.commit("user", jsonEntity);
-
-        jsonEntity.put("name", nameNew);
-        javers.commit("user", jsonEntity);
-
         jsonEntity.put("age", age);
         javers.commit("user", jsonEntity);
 
         List<CdoSnapshot> snapshots = javers.findSnapshots(QueryBuilder.byJsonInstanceId(jsonEntity.get("id"), testEntityType).limit(10).build());
 
-        assertThat(snapshots).hasSize(3);
-        CdoSnapshot newState = snapshots.get(1);
-        CdoSnapshot oldState = snapshots.get(2);
+        assertThat(snapshots).hasSize(2);
         CdoSnapshot ageState = snapshots.get(0);
-        assertThat(oldState.getPropertyValue("name")).isEqualTo(nameOld);
-        assertThat(newState.getPropertyValue("name")).isEqualTo(nameNew);
         assertThat(ageState.getPropertyValue("age")).isEqualTo(age);
-
         List<Change> changes = javers.findChanges(QueryBuilder.byJsonInstanceId(jsonEntity.get("id"), testEntityType).build());
 
-        assertThat(changes).hasSize(2);
+        assertThat(changes).hasSize(1);
         ValueChange change = (ValueChange) changes.get(0);
         assertThat(change.getPropertyName()).isEqualTo("age");
         assertThat(change.getRight()).isEqualTo(age);
@@ -123,7 +115,7 @@ public class JsonBasicCommitTest {
     }
 
     @Test
-    public void shouldListAddDouble() {
+    public void shouldFindChangesWhenAddDouble() {
         double weight = 82.78;
         javers.commit("user", jsonEntity);
 
@@ -145,7 +137,7 @@ public class JsonBasicCommitTest {
     }
 
     @Test
-    public void shouldListAddArray() {
+    public void shouldFindChangesWhenAddArray() {
         String[] friends = {"John", "Rom", "Antonio", "Patric"};
 
         javers.commit("user", jsonEntity);
@@ -163,23 +155,65 @@ public class JsonBasicCommitTest {
         ArrayChange change = (ArrayChange) changes.get(0);
         assertThat(change.getPropertyName()).isEqualTo("friends");
     }
+    @Test
+    public void shouldFindChangesWhenAddArrayListWithString() {
+        List<String> arrlist = new ArrayList<String>();
+        arrlist.add("test1");
+        arrlist.add("test2");
+        javers.commit("user", jsonEntity);
+        jsonEntity.put("arrlist", arrlist);
+        javers.commit("user", jsonEntity);
+        List<Change> changes = javers.findChanges(QueryBuilder.byJsonInstanceId(jsonEntity.get("id"), testEntityType).build());
+
+        assertThat(changes).hasSize(1);
+        ListChange change = (ListChange) changes.get(0);
+        assertThat(change.getPropertyName()).isEqualTo("arrlist");
+    }
+    @Test
+    public void shouldFindChangesWhenAddArrayListWithDouble() {
+        List<Double> arrlist = new ArrayList<Double>();
+        arrlist.add(1.00);
+        arrlist.add(2.00);
+        javers.commit("user", jsonEntity);
+        jsonEntity.put("arrlist", arrlist);
+        javers.commit("user", jsonEntity);
+        List<Change> changes = javers.findChanges(QueryBuilder.byJsonInstanceId(jsonEntity.get("id"), testEntityType).build());
+
+        assertThat(changes).hasSize(1);
+        ListChange change = (ListChange) changes.get(0);
+        assertThat(change.getPropertyName()).isEqualTo("arrlist");
+    }
+    @Test
+    public void shouldFindChangesWhenAddArrayListWithInteger() {
+        List<Integer> arrlist = new ArrayList<Integer>();
+        arrlist.add(10);
+        arrlist.add(20);
+        javers.commit("user", jsonEntity);
+        jsonEntity.put("arrlist", arrlist);
+        javers.commit("user", jsonEntity);
+        List<Change> changes = javers.findChanges(QueryBuilder.byJsonInstanceId(jsonEntity.get("id"), testEntityType).build());
+
+        assertThat(changes).hasSize(1);
+        ListChange change = (ListChange) changes.get(0);
+        assertThat(change.getPropertyName()).isEqualTo("arrlist");
+    }
 
     @Test
-    public void shouldListChangeMapName() {
+    public void shouldFindChangesWhenAddMap() {
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("test","test");
         javers.commit("user", jsonEntity);
-        String testEntity = "testSelfLink";
-        jsonEntity.put("selfLink", testEntity);
+        jsonEntity.put("testMap", map);
         javers.commit("user", jsonEntity);
 
         List<Change> changes = javers.findChanges(QueryBuilder.byJsonInstanceId(jsonEntity.get("id"), testEntityType).build());
         assertThat(changes).hasSize(1);
-        ValueChange change = (ValueChange) changes.get(0);
-        assertThat(change.getPropertyName()).isEqualTo("selfLink");
-        assertThat(change.getRight()).isEqualTo(testEntity);
+        MapChange change = (MapChange) changes.get(0);
+        assertThat(change.getPropertyName()).isEqualTo("testMap");
     }
 
     @Test
-    public void shouldListRemoveMapValue() {
+    public void shouldFindChangeWhenRemoveMap() {
         javers.commit("user", jsonEntity);
         assertThat(jsonEntity).hasSize(3);
         jsonEntity.remove("name");

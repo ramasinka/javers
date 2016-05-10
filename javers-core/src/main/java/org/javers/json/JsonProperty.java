@@ -12,7 +12,8 @@ import java.util.*;
 public class JsonProperty extends Property {
     String name;
     Type jsonType;
-     Map<String, Object> map = new HashMap<String, Object>();
+    Map<String, Object> map = new HashMap<String, Object>();
+    List<String> list = new ArrayList<>();
 
     public JsonProperty(JaversMember member, boolean hasTransientAnn) {
         super(member, hasTransientAnn);
@@ -30,15 +31,22 @@ public class JsonProperty extends Property {
 
     @Override
     public Type getGenericType() {
-           try {
-                Type type = map.getClass();
-               if(jsonType.equals(type) ){
-                   ParameterizedType pt = (ParameterizedType) JsonProperty.class.getDeclaredField("map").getGenericType();
-                   return pt;
-               }
-           } catch (NoSuchFieldException e) {
-               e.printStackTrace();
-           }
+        try {
+            Type typeMap = map.getClass();
+            if (jsonType.equals(typeMap)) {
+                ParameterizedType pt = (ParameterizedType) JsonProperty.class.getDeclaredField("map").getGenericType();
+                return pt;
+            } else {
+                Type typeList = list.getClass();
+                if (jsonType.equals(typeList)) {
+                    ParameterizedType pt = (ParameterizedType) JsonProperty.class.getDeclaredField("list").getGenericType();
+                    return pt;
+
+                }
+            }
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+        }
         return jsonType;
     }
 }
