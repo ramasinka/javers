@@ -24,6 +24,12 @@ public class JsonProperty extends Property {
         this.jsonType = jsonType;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+    public void setJsonType(Type jsonType){
+        this.jsonType = jsonType;
+    }
     @Override
     public String getName() {
         return name;

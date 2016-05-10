@@ -23,6 +23,7 @@ public class JsonManagedType extends ManagedType {
         this.jsonCdo = (JsonLiveGraphFactory.MapWrapper) jsonCdo;
         this.managedClass = managedClass;
         jsonMap = (HashMap) ((JsonLiveGraphFactory.MapWrapper) jsonCdo).getMap();
+
     }
 
     @Override

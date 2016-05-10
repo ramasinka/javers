@@ -156,7 +156,7 @@ public class JsonBasicCommitTest {
         assertThat(change.getPropertyName()).isEqualTo("friends");
     }
     @Test
-    public void shouldFindChangesWhenAddArrayListWithString() {
+    public void shouldFindChangesWhenAddListWithString() {
         List<String> arrlist = new ArrayList<String>();
         arrlist.add("test1");
         arrlist.add("test2");
@@ -170,7 +170,7 @@ public class JsonBasicCommitTest {
         assertThat(change.getPropertyName()).isEqualTo("arrlist");
     }
     @Test
-    public void shouldFindChangesWhenAddArrayListWithDouble() {
+    public void shouldFindChangesWhenAddListWithDouble() {
         List<Double> arrlist = new ArrayList<Double>();
         arrlist.add(1.00);
         arrlist.add(2.00);
@@ -184,7 +184,7 @@ public class JsonBasicCommitTest {
         assertThat(change.getPropertyName()).isEqualTo("arrlist");
     }
     @Test
-    public void shouldFindChangesWhenAddArrayListWithInteger() {
+    public void shouldFindChangesWhenAddListWithInteger() {
         List<Integer> arrlist = new ArrayList<Integer>();
         arrlist.add(10);
         arrlist.add(20);
@@ -213,14 +213,14 @@ public class JsonBasicCommitTest {
     }
 
     @Test
-    public void shouldFindChangeWhenRemoveMap() {
+    public void shouldFindChangesWhenRemoveData() {
         javers.commit("user", jsonEntity);
-        assertThat(jsonEntity).hasSize(3);
         jsonEntity.remove("name");
         javers.commit("user", jsonEntity);
-        assertThat(jsonEntity).hasSize(2);
 
         List<CdoSnapshot> snapshots = javers.findSnapshots(QueryBuilder.byJsonInstanceId(jsonEntity.get("id"), testEntityType).build());
         assertThat(snapshots).hasSize(2);
+        List<Change> changes = javers.findChanges(QueryBuilder.byJsonInstanceId(jsonEntity.get("id"), testEntityType).build());
+        assertThat(changes).hasSize(1);
     }
 }
